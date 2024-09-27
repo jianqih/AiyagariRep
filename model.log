@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.4)  27 SEP 2024 11:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.4)  27 SEP 2024 22:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -954,19 +954,19 @@ Overfull \hbox (14.49394pt too wide) in paragraph at lines 110--111
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 115.
+Package xcolor Warning: Incompatible color definition on input line 129.
 
 
-Package xcolor Warning: Incompatible color definition on input line 115.
+Package xcolor Warning: Incompatible color definition on input line 129.
 
 [1
 
 {/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc}]
 
-Package xcolor Warning: Incompatible color definition on input line 149.
+Package xcolor Warning: Incompatible color definition on input line 163.
 
 
-Package xcolor Warning: Incompatible color definition on input line 149.
+Package xcolor Warning: Incompatible color definition on input line 163.
 
 (./model.bbl
 
@@ -980,7 +980,7 @@ Underfull \hbox (badness 1609) in paragraph at lines 13--14
 []\OT1/ppl/b/n/10.95 (+20) Boppart, Timo, Per Krusell, and Kurt Mit-man\OT1/ppl/m/n/10.95 (+20) , ``Ex-ploit-ing MIT Shocks in
  []
 
-) [2] 
+[2]) [3] 
 enddocument/afterlastpage: lastpage setting LastPage.
 (./model.aux)
  ***********
@@ -991,18 +991,18 @@ Package rerunfilecheck Info: File `model.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 27597 strings out of 474116
- 507614 string characters out of 5743683
- 1945187 words of memory out of 5000000
- 49337 multiletter control sequences out of 15000+600000
- 582775 words of font info for 144 fonts, out of 8000000 for 9000
+ 27614 strings out of 474116
+ 507836 string characters out of 5743683
+ 1948187 words of memory out of 5000000
+ 49341 multiletter control sequences out of 15000+600000
+ 583878 words of font info for 151 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,12n,117p,998b,570s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,12n,117p,998b,596s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on model.pdf (2 pages, 107690 bytes).
+Output written on model.pdf (3 pages, 112313 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
- 66 compressed objects within 1 object stream
- 15 named destinations out of 1000 (max. 500000)
- 35853 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 95 PDF objects out of 1000 (max. 8388607)
+ 71 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 500000)
+ 37901 words of extra memory for PDF output out of 42996 (max. 10000000)
 

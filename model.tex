@@ -112,6 +112,20 @@
     \item Market clearing conditions: $Y = \int c d\mu + K' -(1-\delta )K$ and $L = \int l d\mu$ and capital $K = \int k d\mu$. 
     \item Calibration: set $\beta = 0.96,\gamma=2,B=0,\delta = 0.1,\alpha=0.33$. 
 \end{itemize}
+
+\paragraph{Tauchen method} Here we use the Tauchen method to discretize the AR(1) process $$ \log l_t = \rho \log l_{t-1}+\sigma_t \varepsilon_t $$
+here $\sigma_z = \frac{1}{\sqrt{1-\rho^2}}$. First, we set $n$, the number of realizations (usually 5 or 6). Second, we pick $m$ and set $z_{\max} = \sigma_z m$ and $z_{\min} = -\sigma_z m$ where usual values of $m$ 2 or 3. Hence, we could write down the discretization $z_i=z_{\min} + \frac{z_{\max}-z_{\min}}{n-1}(i-1)$ for $i=1,\ldots,n$ for equal distance and construct the midpoint $\{\tilde{z}\}_{i=1}^{n-1}$, which are given by $\tilde{z}_i = \frac{z_{i+1}+z_i}{2}$. Lastly, we calculate the transition probabilities $\pi_{z,z'}$ by the following formula: 
+\begin{equation}
+    \begin{aligned}
+        \pi_{ij} &= \Phi \left(\frac{\tilde{z}_j-\rho z_i}{\sigma}\right)- \Phi \left(\frac{\tilde{z}_{j-1}-\rho z_i}{\sigma}\right) \quad j=2,3,\cdots,n-1\\ 
+        \pi_{i1} &= \Phi \left(\frac{\tilde{z}_1-\rho z_i}{\sigma}\right)\\
+        \pi_{in} &= 1 - \Phi \left(\frac{\tilde{z}_{n-1}-\rho z_i}{\sigma}\right)
+    \end{aligned}
+\end{equation}
+where $\Phi(\cdot)$ denotes a CDF of a $\mathcal{N}(0,1)$. 
+
+
+
 \paragraph{Endogenous Grid Method\citep{carrollMethodEndogenousGridpoints2006}} Start from at the end of period level of capital, using the Euler equation, one may recover the beginning-of-period consumption and level of capital without using a root-finding algorithm. 
 
 Cash-on-hand is $m_t = (1+r_t)a_t + w_t l_t$ and the Euler equation is $u'(c_t) = \beta (1+r_{t+1})u'(c_{t+1})$.
