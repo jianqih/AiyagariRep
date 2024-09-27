@@ -1,0 +1,18 @@
+\ifx\undefined\bysame
+\newcommand{\bysame}{\leavevmode\hbox to\leftmargin{\hrulefill\,\,}}
+\fi
+\begin{thebibliography}{xx}
+
+\harvarditem[Aiyagari]{Aiyagari}{1994}{Aiyagari1994}
+{\bf Aiyagari, S.~Rao}, ``{Uninsured Idiosyncratic Risk and Aggregate Saving*},'' {\it The Quarterly Journal of Economics}, 08 1994, {\it 109} (3), 659--684.
+
+\harvarditem[Auclert et al.]{Auclert, Bard{\'o}czy, Rognlie and Straub}{2021}{auclertUsingSequenceSpaceJacobian2021}
+{\bf Auclert, Adrien, Bence Bard{\'o}czy, Matthew Rognlie, and Ludwig Straub}, ``Using the {{Sequence-Space Jacobian}} to {{Solve}} and {{Estimate Heterogeneous-Agent Models}},'' {\it Econometrica}, 2021, {\it 89} (5), 2375--2408.
+
+\harvarditem[Boppart et al.]{Boppart, Krusell and Mitman}{2018}{boppartExploitingMITShocks2018}
+{\bf Boppart, Timo, Per Krusell, and Kurt Mitman}, ``Exploiting {{MIT}} Shocks in Heterogeneous-Agent Economies: The Impulse Response as a Numerical Derivative,'' {\it Journal of Economic Dynamics and Control}, April 2018, {\it 89}, 68--92.
+
+\harvarditem[Carroll]{Carroll}{2006}{carrollMethodEndogenousGridpoints2006}
+{\bf Carroll, Christopher~D.}, ``The Method of Endogenous Gridpoints for Solving Dynamic Stochastic Optimization Problems,'' {\it Economics Letters}, June 2006, {\it 91} (3), 312--320.
+
+\end{thebibliography}
