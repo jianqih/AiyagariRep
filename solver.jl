@@ -1,45 +1,9 @@
-begin
-    using Parameters # enable @unpack
-    using Distributions # enable cdf of Normal
-    using Roots         # root finding routines: brent
-    using PlutoUI    # printing stuff in the Pluto notebook
-    using Plots 
-    using Interpolations
-end
-
-
-include("tauchen.jl")
-include("interpolation.jl")
-
-include("para.jl")
-
-function coordGridIntp!(xgrid::Array{Float64,1}, xtarget::Array{Float64,1}, 		ibelow::Array{Int64,1}, iweight::Array{Float64,1}; robust = false)
-		xg = length(xgrid); #xt = length(xtarget)
-		xi  = 1; xlow = xgrid[1]; xhigh = xgrid[2] # initialize
-		@inbounds for (it, xtval) in enumerate(xtarget)
-			while xi < xg - 1 # find grid point
-				if xhigh >= xtval; break; end
-				xi += 1
-				xlow = xhigh
-				xhigh = xgrid[xi + 1]
-				end
-			iweight[it] = (xhigh - xtval) / (xhigh - xlow) #  careful with last point. if xhigh<xtval might run into problems.
-			ibelow[it] = xi
-		end
-		if robust == true; iweight =  min.(max.(iweight,0.0), 1.0); end
-	return iweight, ibelow
-end
-
-
-
-param = setPar() # check the parameters above
-
 function solveHHproblemEGM(param, r, w)
     @unpack nA, nS,  gA, gS, transS, β, γ, δ = param
 
     # Define parameters
     maxiter = 2000
-    tol = 1E-5 # tolerance
+    tol = 1E-9 # tolerance
 	
 	# Useful matrices
     gAA = repeat(gA, 1, nS) # nA x nS matrix of asset grid.
@@ -51,11 +15,13 @@ function solveHHproblemEGM(param, r, w)
     ap = copy(cp)   # asset policy
 	endogAA = copy(cp)  # endogenous asset grid 
 
-
+	u(c) = log(c)
+    mu(c) = c.^-γ
+    imu(u) = u.^(-1.0/γ)
 	## === Function that runs one iteration of EGM
 	function endoGridIter(cp)
-		expect = β*(1.0+r)* cp.^-γ*transS' # Right hand side of Euler Eq.
-		c = expect.^(-1.0/γ)    # Invert marginal util to get contemporaneous C
+		mp = β*(1.0+r)* cp.^-γ*transS' # Right hand side of Euler Eq.
+		c = imu(mp)   # Invert marginal util to get contemporaneous C
 		endogAA = (c + gAA - w.*gSS)/(1+r) # compute asset state on endogenous grid (note that gAA is the policy function, which is on-grid)
 
 		# Now compute the state on-grid interpolating the endogenous grid
@@ -77,7 +43,6 @@ function solveHHproblemEGM(param, r, w)
 
 		return cpNew, apNew, endogAA
 	end
-	
 	
 	## ===== Start iteration ====
 	for iter = 1:maxiter
@@ -114,8 +79,7 @@ function solveInvariant(param, decisions)
 	maxiterInv = 50000
 	tolInv = 1E-10
 
-	# === 1. RETRIEVE GRID AND WEIGHT OF INTERPOLATED POLICIES ============== #
-	# ps. the interpolation assume that policy is monotone
+
 	ibelow = fill(0, nA, nS)
 	iweight = zeros(nA, nS)
 	for is = 1:nS
@@ -264,35 +228,4 @@ begin
 		println("Gini of Consumption: $gini_consump")
 
 	end
-end
-
-
-begin
-	plot(gA, [decisions.ap[:,1] decisions.ap[:,nS]], label=["S min" "S max"], lw = 1, legend=:bottomright)
-	title!("Policy Function")
-	axis_lim = 30
-	xlims!(0,axis_lim) 
-	ylims!(0,axis_lim) 
-	xlabel!("a")
-	ylabel!("g_a")
-end
-
-
-begin
-	plot(param.gA, asset_distribution, label="Aggregate", lw = 3)
-	title!("Invariant Distribution")
-	xlims!(-1,50) # little mass over 50
-	ylims!(0,0.05) # Ps the mass of constrained HH is about 20% of individuals in S)1
-	xlabel!("a")
-	ylabel!("density")
-end
-
-
-begin
-	plot(param.gA, [dsn[:,1]./sum(dsn[:,1]) dsn[:,nS]./sum(dsn[:,nS])], label=["S min" "S max" ], lw = 3)
-	title!("Invariant Distribution")
-	xlims!(-1,50) # little mass over 50
-	ylims!(0,0.05) # Ps the mass of constrained HH is about 20% of individuals in S)1
-	xlabel!("a")
-	ylabel!("density")
 end

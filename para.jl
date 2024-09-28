@@ -10,7 +10,7 @@ function setPar(;
 	σ = 0.1, # std deviation
 
 	amax = 30.0, # maximum grid point
-	grid_growth = 0.00  # asset grid curvature (growth rate between points)
+	grid_growth = 0.015  # asset grid curvature (growth rate between points)
 
 	)
 

@@ -107,7 +107,7 @@
     \item Preference: $\mathbb{E}_0\sum_{i=0}^\infty \beta^t u(C_t)$ 
     \item Budget constraint: $c_t + a_{t+1} = (1+r)a_t + w_t l_t$ where $l_t$ follows the AR(1) process: $l_t = \rho l_{t-1}+\sigma\epsilon_t$ and $\epsilon_t \sim N(0,1)$. 
     \item $a_t \geq -B$ and $c_t\geq 0$
-    \item Bellman equation is $v(a,s) = \max_{a_t\geq -B,c_t\geq 0 } u((1+r_t)a_t+w_t l_t-a_{t+1})+ \beta \mathbb{E}[v(a',s')\mid s]$.
+    \item Bellman equation is $V(a,s) = \max_{a_t\geq -B,c_t\geq 0 } u((1+r_t)a_t+w_t l_t-a_{t+1})+ \beta \mathbb{E}[V(a',s')\mid s]$.
     \item C-D production function: $Y_t = A_t K^\alpha_t L^{1-\alpha}_t$ which could drive the prices from FOCs $r = \alpha A_t\left(\frac{K}{L}\right)^{\alpha-1}$ and $w = (1-\alpha )A_t \left(\frac{L}{K}\right)^{\alpha }$. 
     \item Market clearing conditions: $Y = \int c d\mu + K' -(1-\delta )K$ and $L = \int l d\mu$ and capital $K = \int k d\mu$. 
     \item Calibration: set $\beta = 0.96,\gamma=2,B=0,\delta = 0.1,\alpha=0.33$. 
@@ -129,31 +129,72 @@ where $\Phi(\cdot)$ denotes a CDF of a $\mathcal{N}(0,1)$.
 \paragraph{Endogenous Grid Method\citep{carrollMethodEndogenousGridpoints2006}} Start from at the end of period level of capital, using the Euler equation, one may recover the beginning-of-period consumption and level of capital without using a root-finding algorithm. 
 
 Cash-on-hand is $m_t = (1+r_t)a_t + w_t l_t$ and the Euler equation is $u'(c_t) = \beta (1+r_{t+1})u'(c_{t+1})$.
-
-
-Consider the Euler equation $$ u'(c(M)) = \beta R \mathbb{E}_y u'(c(RA+\tilde{y})) $$
-if policy function $c(M)$ is optimal, then it satisfies the above equation with $A = M-c(M)$. given any policy function $c(M)$ an updated policy function $c'(M')$ with \textit{parametrized curve} 
-$$ \begin{cases}
-    c' = (u')^{-1}\left(\beta R \mathbb{E}_y u'(c(RA+\tilde{y}))\right)\\ 
-    M' = A + c'
-\end{cases} $$
-where $A$ is the parameter ranges from $0$ to $M$. 
-
-Recall Coleman-Reffet operator $K(c)(M):\mathcal{P}\to \mathcal{P}$ is defined as 
-\begin{itemize}
-    \item takes as input policy function $c(M)\in \mathcal{P}$
-    \item returns the updated policy function $c'(M)\in \mathcal{P}$ that for every $M$ satisfies the Euler equation. $u'(c'(M)) = \beta R \mathbb{E}_y u'(c[R(M-c'(M))+\tilde{y}])$
-\end{itemize}
-Standard implementation: fix grid over $M$; with given $c(M)$ solve the equation for $c$ in each point $M$ on the grid. 
-EGM implementation of Coleman-Reffet operator:
+% \begin{equation}
+%     RHS = \beta (1+r)c^{-\gamma}\cdot\Pi 
+% \end{equation}
 \begin{enumerate}
-    \item Fix grid over $A$;
-    \item With given $c(M)$ for each point on the grid compute $$ c' = (u')^{-1}\left(\beta R\mathbb{E}_y u'(c(RA+\tilde{y}))\right)\quad M' = A + c'$$ 
-    \item Build the return policy function as interpolation over $(M',c)$ 
+    \item Fix a grid over $a$; 
+    \item Given current guess of policy function $c(M)$, (and given current grid $M$), directly compute $c'(M')$ for each point on the grid $M$ by the following formula: 
+    $$ \begin{cases}
+        c_j = (u')^{-1}\left(\beta R E_y u'(c((1+r)a_j+w_tl_t))\right)\\ 
+        M_j = (1+r)a_j+c_j
+    \end{cases}  $$
+    Iterating on all points $a_j\in A$
+    \item The policy function $c'$ is the interpolation of points, i.e. $c'(M') \equiv \{(M_i,c_i)\}_{i=1}^n$
 \end{enumerate}
-$$ M\to c(M)\to A = M-c(M) \to M' = R(M-c(M))+\tilde{y} = RA+\tilde{y} $$
+% Consider the Euler equation $$ u'(c(M)) = \beta R \mathbb{E}_y u'(c(RA+\tilde{y})) $$
+% if policy function $c(M)$ is optimal, then it satisfies the above equation with $A = M-c(M)$. given any policy function $c(M)$ an updated policy function $c'(M')$ with \textit{parametrized curve} 
+% $$ \begin{cases}
+%     c' = (u')^{-1}\left(\beta R \mathbb{E}_y u'(c(RA+\tilde{y}))\right)\\ 
+%     M' = A + c'
+% \end{cases} $$
+% where $A$ is the parameter ranges from $0$ to $M$. 
 
-A contains all the information about calculation of $M'$ and $c'$, and $M'$ contains all the information about the calculation of $c'$.
+% Recall Coleman-Reffet operator $K(c)(M):\mathcal{P}\to \mathcal{P}$ is defined as 
+% \begin{itemize}
+%     \item takes as input policy function $c(M)\in \mathcal{P}$
+%     \item returns the updated policy function $c'(M)\in \mathcal{P}$ that for every $M$ satisfies the Euler equation. $u'(c'(M)) = \beta R \mathbb{E}_y u'(c[R(M-c'(M))+\tilde{y}])$
+% \end{itemize}
+% Standard implementation: fix grid over $M$; with given $c(M)$ solve the equation for $c$ in each point $M$ on the grid. 
+% EGM implementation of Coleman-Reffet operator:
+% \begin{enumerate}
+%     \item Fix grid over $A$;
+%     \item With given $c(M)$ for each point on the grid compute $$ c' = (u')^{-1}\left(\beta R\mathbb{E}_y u'(c(RA+\tilde{y}))\right)\quad M' = A + c'$$ 
+%     \item Build the return policy function as interpolation over $(M',c)$ 
+% \end{enumerate}
+% $$ M\to c(M)\to A = M-c(M) \to M' = R(M-c(M))+\tilde{y} = RA+\tilde{y} $$
+
+% A contains all the information about calculation of $M'$ and $c'$, and $M'$ contains all the information about the calculation of $c'$.
+
+
+\paragraph{Extension: endogenous labor supply}
+The value function will be 
+\begin{equation}
+    V(a_t,l_t) = \max_{c_t,h_t,a_{t+1}} u(c_t)-v(h_t) + \beta E_t [V(a_{t+1},l_{t+1})]
+\end{equation}
+subject to $$ c_t + a_{t+1} = (1+r)a_t + h_t l_t w_t $$
+$$a_{t+1}\geq -B,c_t\geq 0 \text{ and }h_t\geq 0$$
+The \textbf{optimality conditions} for every period $t$ are 
+$$
+\begin{aligned}
+c_t:& \quad 0 =u^{\prime}\left(c_t\right)-\lambda_t \\
+h_t:& \quad 0 =-v^{\prime}\left(h_t\right)+\lambda_t l_t w_t \\
+a_{t+1}: &\quad 0  =\beta \mathrm{E}_t\left[\frac{\partial V\left(a_{t+1}, y_{t+1}\right)}{\partial a_{t+1}}\right]-\lambda_t+\mu_t, \quad \mu_t\left(a_{t+1}+B\right)=0, \mu_t \geq 0 \\
+\text{Envelope condition:}&\quad \frac{\partial V\left(a_t, l_t\right)}{\partial a_t}  =\lambda_t\left(1+r_t\right) \\
+\text{Budget constraint:}&\quad 0  =\left(1+r_t\right) a_t+h_t l_t w_t-c_t-a_{t+1}
+\end{aligned}
+$$
+Eliminating the Lagrange multiplier $\lambda$, and the Envelope condition yields the set of equations 
+$$
+\begin{aligned}
+v^{\prime}\left(h_t\right) & =u^{\prime}\left(c_t\right) l_t w_t \\
+u^{\prime}\left(c_t\right) & =\beta \mathrm{E}_t\left[u^{\prime}\left(c_{t+1}\right)\left(1+r_t\right)\right]+\mu_t \\
+\mu_t\left(a_{t+1}+B\right) & =0, \mu_t \geq 0 \\
+a_{t+1} & =\left(1+r_t\right) a_t+h_t l_t w_t-c_t
+\end{aligned}
+$$
+that characterizes the optimality of the household’s choice. 
+
 
 \paragraph{BKM\citep{boppartExploitingMITShocks2018}}
 
